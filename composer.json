@@ -11,5 +11,10 @@
   "require": {
     "ext-json": "*",
     "ext-mbstring": "*"
+  },
+  "require-dev": {
+    "phpstan/phpstan": "^1.2",
+    "codeception/codeception": "^4.1",
+    "codeception/module-asserts": "^1.0.0"
   }
 }
