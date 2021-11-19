@@ -1,0 +1,36 @@
+name: Test
+
+on: [push]
+
+jobs:
+  ci:
+    runs-on: ubuntu-latest
+
+    strategy:
+      matrix:
+        php:
+          - '8.0'
+          - '7.4'
+        image: [php]
+
+    if: contains(github.event.head_commit.message, 'ci skip') == false
+
+    container:
+      image: ${{ matrix.image }}:${{ matrix.php }}-alpine
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v2
+
+      - name: Install Composer
+        run: |
+          apk add --no-cache composer
+          composer install --dev
+
+      - name: PHPStan
+        run: |
+          php vendor/bin/phpstan analyze --level max src
+
+      - name: Codeception
+        run: |
+          php vendor/bin/codecept run
